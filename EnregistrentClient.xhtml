@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <head>
+    <meta http-equiv="Content-type" content="text/xhtml;charset=utf-8" />
+  	<title> Enregistrement des personnes</title>
+  </head>
+
+  <body>
+  
+  
+  <a4j:keepAlive beanName="bine" />
+  <div>
+  			<ui:insert>
+      	<ui:include src="/header.xhtml" />
+  			</ui:insert>
+  	
+  		</div>
+ 
+  <div  style="width:100%;height:400px;border:2px solid #00BFFF;border-radius:0px;background-color:skyblue">
+    <a style="margin-left:65%" href='PageAccuielChefProd.jsf'>RETOUR </a>
+  <rich:panel style ="width:700px;font-size:35px;margin-left:250px;background-color:#00BFFF;" >
+  <f:facet name="header">PAGE D'ENREGISTREMENT DES CLIENTS</f:facet>
+  	<h:form id="fo">
+  	
+  	  	<h:selectOneMenu value="#{demandeBine.idPersonneConnecte}" style ="visibility: hidden;">
+  		<f:selectItems value="#{bine.listPersonneConnecte}"/>
+  		</h:selectOneMenu>
+  	
+  	
+  	<h:panelGrid columns="2">
+  	
+  		<h:panelGrid columns="2">	
+  			<h:outputText value="NOM :     " />
+  			<h:panelGrid columns="1">
+  			<a4j:outputPanel id="messageAboutName">
+					<h:outputText value="LE NOM PEUT ETRE COMPOSE DE LETTRES ET/OU CHIFFRES UNIQUEMENT!!" rendered="#{bine.showMessageErrorForPersoName}"/> 
+			</a4j:outputPanel>
+  			<h:inputText value="#{bine.nomPersonne}" >
+				<a4j:support event="onkeyup" actionListener="#{bine.listernInputPersoName}" reRender="messageAboutName" /> 			
+  			</h:inputText>
+  			</h:panelGrid>
+  		</h:panelGrid>
+  		
+  		<h:panelGrid columns="2">
+  			<h:outputText value="PRENOM :     " />
+  			<h:panelGrid columns="1">
+  			<a4j:outputPanel id="messageAboutPrenom">
+					<h:outputText value="LE PRENOM PEUT ETRE COMPOSE DE LETTRES ET/OU CHIFFRES ET/OU '_' UNIQUEMENT!!" rendered="#{bine.showMessageErrorForPersoPrenom}" /> 
+			</a4j:outputPanel>
+  			<h:inputText value="#{bine.prenomPersonne}" >
+  				<a4j:support event="onkeyup" actionListener="#{bine.listernInputPersoPrenom}" reRender="messageAboutPrenom" /> 			
+  			</h:inputText>
+  			</h:panelGrid>
+  		</h:panelGrid>
+  			
+  		
+
+
+  		 
+  		
+  		<h:panelGrid columns="2" >
+  			<h:outputText value="TELEPHONE  :" />
+  			<h:inputText value="#{bine.tel}" />
+  		</h:panelGrid>
+
+  		
+  	</h:panelGrid>
+  		
+  <a4j:commandButton value="INSERRER" action="#{bine.insertClient}"  data="#{bine.message}" oncomplete="alert(data)" reRender="tab,fo"/> 		
+ 	</h:form>	
+ </rich:panel>
+  	
+
+  	
+  	
+  	
+  	<h:form>
+  	<rich:panel style ="width:700px;font-size:35px;margin-left:250px;background-color:#00BFFF;">
+  		<rich:dataTable id="tab" value="#{bine.listPesonnesClient}" var="per" rows="5">
+  		<f:facet name="header">LISTE DES #{bine.profil}</f:facet>
+ 
+   		<rich:column>
+  		<f:facet name="header">NUMERO</f:facet>
+  		#{per.idPersonne}
+  		</rich:column>
+ 		
+  		<rich:column>
+  		<f:facet name="header">NOM</f:facet>
+  		#{per.nomPersonne}
+  		</rich:column>
+  		
+   		<rich:column>
+  		<f:facet name="header">PRENOM</f:facet>
+  		#{per.prenomPersonne}
+  		</rich:column>
+  		
+   		<rich:column>
+  		<f:facet name="header">NUMERO UNIQUE</f:facet>
+  		#{per.idPersonn}
+  		</rich:column>
+  		
+  
+  		
+     	<rich:column >
+  		<f:facet name="header">TELEPHONE</f:facet>
+  		#{per.tel}
+  		</rich:column>
+  		
+  		
+  		
+  		<rich:column>
+    		<f:facet name="header">Action</f:facet>
+     			
+      				<a4j:commandLink onclick="#{rich:component('formp')}.show()" value="modifier" reRender="m">
+      				
+      				<f:setPropertyActionListener value="#{per}" target="#{bine.selected}" />
+	  				
+	  				</a4j:commandLink>	
+   		</rich:column>  
+   		
+   		
+   		<rich:column>
+    		<f:facet name="header">SUPPRIMER</f:facet>
+     			
+      				<a4j:commandLink actionListener="#{bine.supprimerClient}" value="supprimer" reRender="tab" data="#{bine.message}" oncomplete="alert(data)">
+      				
+      				<f:setPropertyActionListener value="#{per}" target="#{bine.selected}" />
+	  				
+	  				</a4j:commandLink>	
+   		</rich:column>
+   		
+   		
+   		   		  		   		<f:facet name="footer">
+  			
+  			<rich:datascroller>
+  			
+  				<f:facet name="first">
+  					<h:outputText value="Premier" />
+  				</f:facet>
+  				
+  				<f:facet name="first-disabled">
+  					<h:outputText value="Premier" />
+  				</f:facet>
+  				
+  				<f:facet name="last">
+  					<h:outputText value="Dernier" />
+  				</f:facet>
+  				
+  				<f:facet name="last-disabled">
+  					<h:outputText value="Dernier" />
+  				</f:facet>
+  				
+  				<f:facet name="next">
+  					<h:outputText value="Suivant" />
+  				</f:facet>
+  				
+  				<f:facet name="next-disabled">
+  					<h:outputText value="Suivant" />
+  				</f:facet>
+  				
+  				<f:facet name="previous">
+  					<h:outputText value="Precedent" />
+  				</f:facet>
+  				
+  				<f:facet name="previous-disabled">
+  					<h:outputText value="Précédent" />
+  				</f:facet>
+  				
+  			</rich:datascroller>
+  			
+  		</f:facet>
+   		
+  		
+  		</rich:dataTable>
+  	</rich:panel>
+  	</h:form>
+  	
+  	
+
+  	
+  	<rich:modalPanel id='formp' width="700" height="300" style="background-color:#00BFFF;">
+  	
+ 		<f:facet name="header">FORMULAIRE DE MODIFICATION</f:facet>
+  		<f:facet name="controls">
+ 			<h:graphicImage value="/image/close.png" onclick="#{rich:component('formp')}.hide();"/>
+  		</f:facet>
+  		
+  		
+  		
+  	
+  		<h:panelGroup>
+  			<h:form id="m" >
+  			  	<h:panelGrid columns="2" >
+  					<h:panelGrid columns="2">	
+  						<h:outputText value="NOM :     " />
+  						<h:inputText value="#{bine.selected.nomPersonne}" />
+  					</h:panelGrid>
+  		
+  					<h:panelGrid columns="2">
+  						<h:outputText value="PRENOM :     " />
+  						<h:inputText value="#{bine.selected.prenomPersonne}" />
+  					</h:panelGrid>
+  			
+  			
+  			
+  		
+  					<h:panelGrid columns="2"  >
+  					<h:outputText value="TELEPHONE  :" />
+  					<h:inputText value="#{bine.selected.tel}" />
+  					</h:panelGrid>
+  					
+  		
+  				
+  				</h:panelGrid>
+  	
+<a4j:commandButton action="#{bine.modifierClient}" value="MODIFIER" data="#{bine.message}" oncomplete="alert(data)" reRender="tab" />
+		</h:form>
+	</h:panelGroup>
+	
+	
+  </rich:modalPanel> 
+  
+  
+    </div>
+  
+  	<div style="width:100%;height:30px;border:2px solid #00BFFF;border-radius:0px 0px 12px 12px;background-color:#00BFFF;">
+  			
+  			<rich:panel style="height:25px;border:none;border-radius:0px 0px 6px 8px;margin-top:-3px;background-color:#00BFFF;">
+  				<h:outputText value="copyright© 2014. Tous droits réservés,  Chantal et Vernack " style="font-family:calibri;font-weight:bold;font-size:14px;font-style:italic;margin-left:440px;"/>
+  			</rich:panel>
+  			
+  		</div>
+  </body>
+</html>

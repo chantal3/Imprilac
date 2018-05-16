@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <head>
+  <meta http-equiv="Content-type" content="text/xhtml;charset=utf-8" />
+  </head>
+
+  <body>
+  
+    <a4j:keepAlive beanName="commandeBine" />
+ 
+   <div>
+  			<ui:insert>
+      	<ui:include src="/header.xhtml" />
+  			</ui:insert>
+  	
+  		</div>
+ 
+  <div  style="width:100%;height:400px;border:2px solid #00BFFF;border-radius:0px;background-color:skyblue">
+    <a style="margin-left:65%" href='PageAccuielChefProd.jsf'>RETOUR </a>
+  <rich:panel style ="width:770px;font-size:35px;margin-left:150px;background-color:#00BFFF;">
+  <f:facet name="header"><h1>PAGE D'EDITION DES COMMANDES</h1></f:facet>
+  <h:form>
+  
+    	<h:selectOneMenu value="#{bine.idPersonneConnecte}" style ="visibility: hidden;">
+  			<f:selectItems value="#{bine.listPersonneConnecte}"/>
+  		</h:selectOneMenu>
+  		<h:selectOneMenu value="#{commandeBine.idPersonneConnecte}" style ="visibility: hidden;">
+  			<f:selectItems value="#{bine.listPersonneConnecte}"/>
+  		</h:selectOneMenu>
+  
+  
+  
+	<rich:tabPanel switchType="ajax" selectedTab="sf">
+		<rich:tab label="COMMANDE" id="cmd" style ="background-color:#00BFFF;font-weight:bold;">
+			
+		
+    	<a4j:outputPanel ajaxRendered="true" >
+ 			<h:panelGrid columns="1"  rendered="#{commandeBine.showMessageCmd}" id="msgCmd">
+    		<h:outputText value="IL Y A UNE COMMANDE EN COUR DE CREATION.  POUR CREER UNE AUTRE, VOUS DEVEZ D'ABORD SUPPRIMER CELLE EN COUR!" style ="color:green;font-size:20px;font-weight:bold;"/>
+    		</h:panelGrid>
+    	</a4j:outputPanel>
+			
+			<h:panelGrid columns="6" style ="margin-bottom:50px;margin-top:30px">
+    			<h:outputText value="NOM DU CLIENT :" style ="font-weight:bold;"/>
+  				<h:selectOneMenu value="#{commandeBine.idClient}" id="cli" disabled="#{commandeBine.desactiveNomClient}">
+  					<f:selectItems value="#{commandeBine.listDesClients}"/>
+  					<a4j:support event="onchange"/>
+  				</h:selectOneMenu>
+  			
+  				<h:outputText value="NIF  :" style ="font-weight:bold;"/>
+  				<h:inputText value="#{commandeBine.nif}" disabled="#{commandeBine.activenif}" id="ni"/>
+  			
+  				<h:outputText value="SOCIETE  :" style ="font-weight:bold;"/>
+  				<h:inputText value="#{commandeBine.societe}" disabled="#{commandeBine.activesociete}" id="so"/>
+    	   	
+    		</h:panelGrid>
+    																																				
+    <h:panelGroup style ="padding-top:50px;margin-top:50px;">
+   	 	<a4j:commandButton value="CREER" action="#{commandeBine.instancierCmd}"  data="#{commandeBine.message}" oncomplete="alert(data)" reRender="ni,so,msgCmd,cli,typPro,nomPr,nbrEx,maqPre,chem,pro,coutMaq,tabMat,tab0,char,qtteChar,tab,mont1,mont2"/>
+   	 	<a4j:commandButton value="SUPRIMER" action="#{commandeBine.supprimerCmd}"  data="#{commandeBine.message}" oncomplete="alert(data)" reRender="ni,so,msgCmd,cli,typPro,nomPr,nbrEx,maqPre,chem,pro,char,qtteChar,coutMaq,tabMat,tab0,tab,mont1,mont2"/>
+	 	<a4j:commandButton value="ENREGISTRER" action="#{commandeBine.saveCmd}"  data="#{commandeBine.message}" oncomplete="alert(data)" reRender="ni,so,msgCmd,cli,typPro,nomPr,nbrEx,maqPre,chem,pro,char,qtteChar,coutMaq,tabMat,tab0,tab,mont1,mont2"/>
+   	 	<a4j:commandButton value="RETOUR DANS AJOUT DES PRODUITS" action="#{commandeBine.OrienteDansAjoutDesProd}"  data="#{commandeBine.message}" oncomplete="alert(data)" reRender="cli,ni,so,typPro,nomPr,nbrEx,maqPre,chem,pro,char,qtteChar"/>   	 
+	
+	<h:commandButton action="#{commandeBine.printPDF}" value="IMPRIMER" />
+	</h:panelGroup>
+		</rich:tab>
+
+
+
+		<rich:tab label="PRODUITS COMMANDES" id="pdts" style ="background-color:#00BFFF;font-weight:bold;">
+			
+			<h:panelGrid columns="4">
+  		 		<h:outputText value="TYPE DU PRODUIT :" style ="font-weight:bold;"/>
+  				<h:selectOneMenu value="#{commandeBine.idProd}" id="typPro" disabled="#{commandeBine.desactiveProd}">
+  					<f:selectItems value="#{commandeBine.listDesProd}"/>
+  					<a4j:support event="onchange"/>
+  				</h:selectOneMenu> 	
+  		
+				<h:outputText value="NOM DU PRODUIT  :" style ="font-weight:bold;"/>
+  				<h:inputText value="#{commandeBine.titreProd}" id="nomPr" disabled="#{commandeBine.desactiveTitre}"/>
+
+				<h:outputText value="NOMBRE D'EXEMPLAIRES  :" style ="font-weight:bold;"/>
+  				<h:inputText value="#{commandeBine.nbrExemplaires}" id="nbrEx" disabled="#{commandeBine.desactiveNbreEx}"/>
+  			
+  				<h:outputText value="MAQUETTE PRESENTE  :" style ="font-weight:bold;"/>
+  				<h:selectOneRadio value="#{commandeBine.maqPresente}" id="maqPre" disabled="#{commandeBine.desactiveMaqPres}">
+  					<f:selectItem itemValue="OUI" itemLabel="OUI"/>
+   					<f:selectItem itemValue="NON" itemLabel="NON"/>
+  				</h:selectOneRadio> 
+  			
+  				<h:outputText value="CHEMIN :" style ="font-weight:bold;"/>
+  				<h:selectOneMenu value="#{commandeBine.idChemin}" id="chem" disabled="#{commandeBine.desactiveChemin}">
+  					<f:selectItems value="#{commandeBine.listDesChemin}"/>
+  					<a4j:support event="onchange" reRender="tab0"/>
+  				</h:selectOneMenu> 
+  				
+  				<h:outputText value="COUT POUR MAQUETTE  :" style ="font-weight:bold;"/>
+  				<h:inputText value="#{commandeBine.coutMaqt}" id="coutMaq" disabled="#{commandeBine.desactiveNbreEx}"/>
+  			
+  					
+		
+		</h:panelGrid>
+																																								
+   	 <a4j:commandButton value="AJOUTER LE PRODUIT" action="#{commandeBine.ajouterProdSurCmd}"  data="#{commandeBine.message}" oncomplete="alert(data)" reRender="pro,char,qtteChar,typPro,nomPr,nbrEx,maqPre,chem,coutMaq,mont2,tabMat,tab0,tab,mont1"/>
+   	 <a4j:commandButton value="FINIR AJOUT DES PRODUITS" action="#{commandeBine.finirAjoutDesProdSurCmd}"  data="#{commandeBine.message}" oncomplete="alert(data)" reRender="msgCmd,cli,ni,so,pro,char,qtteChar,typPro,nomPr,nbrEx,maqPre,chem,coutMaq,tabMat,tab0,tab,mont1,mont2"/>   	 
+   	 <a4j:commandButton value="RETOUR DANS AJOUT DES CHARGES" action="#{commandeBine.OrienteDansAjoutDesCharges}"  data="#{commandeBine.message}" oncomplete="alert(data)" reRender="cli,ni,so,typPro,nomPr,nbrEx,maqPre,chem,pro,char,qtteChar"/>   	 
+			
+	
+	
+	
+				<rich:panel style ="background-color:#00BFFF;">
+		
+				<h:panelGrid columns="2">
+		
+					<rich:dataTable id="tabMat" value="#{commandeBine.com.listProd}" var="et">
+					<f:facet name="header"><h3>LISTE DES PRODUITS DE LA COMMANDE EN COUR</h3></f:facet>
+  		
+  						<rich:column>
+  						<f:facet name="header">NUMERO</f:facet>
+  							#{et.num}
+  						</rich:column>
+  	
+  						<rich:column>
+  						<f:facet name="header">DESIGNATION DU PRODUIT</f:facet>
+  							#{et.titre}
+  						</rich:column>
+  						
+  						<rich:column>
+    					<f:facet name="header">SUPPRIMER</f:facet>
+     			
+      					<a4j:commandLink actionListener="#{commandeBine.deleteProd}" value="supprimer" reRender="tabMat,pro,mont1,mont2">
+      				
+      						<f:setPropertyActionListener value="#{et}" target="#{commandeBine.p}" />
+	  				
+	  					</a4j:commandLink>	
+   						</rich:column> 
+   			
+  					</rich:dataTable>
+  		
+
+  					<rich:dataTable id="tab0" value="#{commandeBine.listDesEtapDuChem}" var="et">
+					<f:facet name="header"><h3>LISTE DES ETAPES DU CHEMIN SELECTIONNE</h3></f:facet>
+  		
+  						<rich:column>
+  						<f:facet name="header">NUMERO</f:facet>
+  							#{et.num}
+  						</rich:column>
+  		
+  						<rich:column>
+  						<f:facet name="header">DESIGNATION DE L'ETAPE</f:facet>
+  							#{et.designationEta}
+  						</rich:column>
+  					</rich:dataTable>
+ 
+  		
+  			</h:panelGrid>
+		</rich:panel>
+	
+	
+	
+	
+		</rich:tab>
+	
+	
+	
+		<rich:tab label="CHARGES POUR UN PRODUIT" id="charges" style ="background-color:#00BFFF;font-weight:bold;">
+		
+			<h:panelGrid columns="4">
+				
+				<h:outputText value="PRODUITS SUR COMMANDE :" style ="font-weight:bold;"/>
+  				<h:selectOneMenu value="#{commandeBine.titreProduit}" id="pro" disabled="#{commandeBine.desactiveListProSurDmd}">
+  					<f:selectItems value="#{commandeBine.listDeroulanteDesProd}"/>
+    				<a4j:support event="onchange" actionListener="#{commandeBine.calculMontantPrUnProd}" reRender="tab,char,mont1,mont2"/>				
+  				</h:selectOneMenu> 
+			
+				<h:outputText value="LISTE DES CHARGES :" style ="font-weight:bold;"/>
+  				<h:selectOneMenu value="#{commandeBine.idCharge}" id="char" disabled="#{commandeBine.desactiveListCharges}">
+  					<f:selectItems value="#{commandeBine.listDesChargesNonEncoreAjouter}"/>
+  				</h:selectOneMenu>
+  			
+				<h:outputText value="QUANTITE DE LA CHARGE  :" style ="font-weight:bold;"/>
+  				<h:inputText value="#{commandeBine.quantiteCharge}" id="qtteChar" disabled="#{commandeBine.desactiveQuantiteCharges}"/>
+  		
+			</h:panelGrid>
+			
+ 			<a4j:commandButton value="AJOUTER" action="#{commandeBine.ajouterChargesSurProduit}"  data="#{commandeBine.message}" oncomplete="alert(data)" reRender="pro,tab,char,mont1,mont2"/>
+			<a4j:commandButton value="FINIR AJOUT DES CHARGES" action="#{commandeBine.finirAjoutDesCharges}"  data="#{commandeBine.message}" oncomplete="alert(data)" reRender="tab,typPro,nomPr,nbrEx,maqPre,chem,pro,char,qtteChar,mont1,mont2"/>
+			
+			
+			
+		
+		
+			<rich:panel style ="background-color:#00BFFF;">
+		
+				<h:panelGrid columns="1">
+		
+					<rich:dataTable id="tab" value="#{commandeBine.listDesChargePr1Prod}" var="c">
+					<f:facet name="header"><h3>LISTE DES CHARGES POUR LE PRODUIT <br/>[ #{commandeBine.partieDuTitreSurTableau} ]</h3></f:facet>
+  					
+  					<rich:column>
+  					<f:facet name="header">CHARGE</f:facet>
+  						#{c.designation}
+  					</rich:column>
+  		
+ 
+    				<rich:column>
+  					<f:facet name="header">QUANTITE NECESSAIRE</f:facet>
+  						#{c.quantiteCharge}
+  					</rich:column>
+  					
+  					<rich:column>
+    					<f:facet name="header">SUPPRIMER</f:facet>
+     			
+      					<a4j:commandLink actionListener="#{commandeBine.enleverChargeSurProd}" value="supprimer" reRender="tabMat,pro,tab,mont1,mont2">
+      				
+      						<f:setPropertyActionListener value="#{c}" target="#{commandeBine.selectedCharge}" />
+	  				
+	  					</a4j:commandLink>	
+   					</rich:column> 
+  					
+  					
+  					
+  					</rich:dataTable>
+  					
+  					
+  				</h:panelGrid>
+  					
+  					<h:panelGrid columns="2">
+  						<h:outputText value="MONTANT POUR LE PRODUIT SELECTIONNE :" style ="font-weight:bold;"/>
+  						<h:outputText value="#{commandeBine.montantPourLeProdSelectionne} Fbu" id="mont1" style ="color:green;font-size:20px;font-weight:bold;"/>
+  			
+  						<h:outputText value="MONTANT TOTAL :" style ="font-weight:bold;"/>
+  						<h:outputText value="#{commandeBine.montantTotalDeLaCmd} Fbu" id="mont2" style ="color:green;font-size:20px;font-weight:bold;"/>
+  			
+  					</h:panelGrid>
+  		
+  		
+		</rich:panel>
+			
+			
+		</rich:tab>
+
+	</rich:tabPanel>
+	
+  </h:form>
+  </rich:panel>
+  </div>
+  	<div style="width:100%;height:30px;border:2px solid #00BFFF;border-radius:0px 0px 12px 12px;background-color:#00BFFF;">
+  			
+  			<rich:panel style="height:25px;border:none;border-radius:0px 0px 6px 8px;margin-top:-3px;background-color:#00BFFF;">
+  				<h:outputText value="copyright© 2014. Tous droits réservés,  Chantal et Vernack " style="font-family:calibri;font-weight:bold;font-size:14px;font-style:italic;margin-left:440px;"/>
+  			</rich:panel>
+  			
+  		</div>
+  
+  </body>
+</html>

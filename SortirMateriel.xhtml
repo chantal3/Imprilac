@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <head>
+   	<meta http-equiv="Content-type" content="text/xhtml;charset=utf-8" />
+  </head>
+
+  <body>
+  
+   <a4j:keepAlive beanName="demandeBine" />
+  	   <div>
+  			<ui:insert>
+      	<ui:include src="/header.xhtml" />
+  			</ui:insert>
+  	
+  		</div>
+ 
+  <div  style="width:100%;height:400px;border:2px solid #00BFFF;border-radius:0px;background-color:skyblue">
+   <a style="margin-left:65%" href='PageAccuielGestionr.jsf'>RETOUR </a>
+      <rich:panel style ="width:500px;font-size:35px;margin-left:250px" >
+  	<f:facet name="header">SORTIE DES MATERIAUX</f:facet>
+  		
+  		<h:form>
+  		
+  		<h:selectOneMenu value="#{demandeBine.idPersonneConnecte}" style ="visibility: hidden;">
+  		<f:selectItems value="#{bine.listPersonneConnecte}"/>
+  		</h:selectOneMenu>
+  		
+  			<h:panelGrid columns="4">
+  			
+  			<h:outputText value="DEMANDE :" />
+  			<h:selectOneMenu value="#{demandeBine.idDmd}" id="dmd">
+  				<f:selectItems value="#{demandeBine.listDmdEnCourtEtEtudi}"/>
+  				<a4j:support event="onchange" action="#{demandeBine.ecouteChangeDmd}" reRender="mat,qmatacco,details"/>
+  			</h:selectOneMenu>
+  			
+  			 <h:outputText value="MATERIEL :" />
+  			<h:selectOneMenu value="#{demandeBine.idMateriel}" id="mat">
+  				<f:selectItems value="#{demandeBine.listMatAccordees}"/>
+  				<a4j:support event="onchange" action="#{demandeBine.extraireQteAccordee}" reRender="qmatacco"/>
+  			</h:selectOneMenu>
+  			
+  			<h:outputText value="QUANTITE ACCORDEE :" />
+  			<h:inputText value="#{demandeBine.quantiteMatAccord}" disabled="true" id="qmatacco"/>
+  			
+  			</h:panelGrid>
+  			<a4j:commandButton value="VALIDER" action="#{demandeBine.marquerSortieMat}" data="#{demandeBine.message}" oncomplete="alert(data)" reRender="mat,dmd,qmatacco,details"/> 
+  		</h:form>
+  		
+  	</rich:panel>
+  
+  	      <rich:panel id="details" style ="width:600px;font-size:35px;margin-left:250px;background-color:#00BFFF;">
+  	 <a4j:keepAlive beanName="demandeBine" />
+  	<f:facet name="header">DETAILS DU DEMANDEUR</f:facet>
+  		<h:panelGrid columns="4">
+  			<h:outputText value="NOM :" />
+  			<h:inputText value="#{demandeBine.nom}" disabled="true"/>
+  			<h:outputText value="PRENOM :" />
+  			<h:inputText value="#{demandeBine.prenom}" disabled="true"/>
+  		</h:panelGrid>
+  	</rich:panel>
+  		</div>
+  		<div style="width:100%;height:30px;border:2px solid #00BFFF;border-radius:0px 0px 12px 12px;background-color:#00BFFF;">
+  			
+  			<rich:panel style="height:25px;border:none;border-radius:0px 0px 6px 8px;margin-top:-3px;background-color:#00BFFF;">
+  				<h:outputText value="copyright© 2014. Tous droits réservés,  Chantal et Vernack " style="font-family:calibri;font-weight:bold;font-size:14px;font-style:italic;margin-left:440px;"/>
+  			</rich:panel>
+  			
+  		</div>
+  </body>
+</html>

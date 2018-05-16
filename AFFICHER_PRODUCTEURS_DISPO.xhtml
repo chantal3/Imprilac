@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <head>
+  <meta http-equiv="Content-type" content="text/xhtml;charset=utf-8" /></head>
+
+  <body>
+  
+         <a4j:keepAlive beanName="afficherbine" />
+  <div>
+  			<ui:insert>
+      	<ui:include src="/header.xhtml" />
+  			</ui:insert>
+  	
+  		</div>
+  		
+   <div  style="width:100%;height:400px;border:2px solid #00BFFF;border-radius:0px;background-color:skyblue">
+      <rich:panel style ="width:500px;font-size:35px;margin-left:250px" >
+  <f:facet name="header">PAGE POUR LA VISUALISATION DES PRODUCTEURS DISPONNIBLES</f:facet>
+  
+  	
+  	  	<h:selectOneMenu value="#{afficherbine.idPersonneConnecte}" style ="visibility: hidden;">
+  		<f:selectItems value="#{bine.listPersonneConnecte}"/>
+  		</h:selectOneMenu>
+  		
+  		<h:selectOneMenu value="#{commandeBine.idPersonneConnecte}" style ="visibility: hidden;">
+  		<f:selectItems value="#{bine.listPersonneConnecte}"/>
+  		</h:selectOneMenu>
+  		
+  		
+  	<rich:dataTable id="tab" value="#{afficherbine.listDesProducteursDispo}" var="p">
+  		<f:facet name="header">LISTE DES PRODUCTEURS DISPONNIBLES</f:facet>
+  		
+  		<rich:column>
+  		<f:facet name="header">NUMERO</f:facet>
+  		#{p.numPersonne}
+  		</rich:column>
+  		
+ 
+    	<rich:column>
+  		<f:facet name="header">NOM PERSONNE</f:facet>
+  		#{p.nomPersonne}
+  		</rich:column>
+  		
+     	<rich:column>
+  		<f:facet name="header">PRENOM</f:facet>
+  		#{p.prenomPersonne}
+  		</rich:column>
+  		
+  	  	<rich:column>
+  		<f:facet name="header">NUMERO UNIQUE</f:facet>
+  		#{p.idPersonne}
+  		</rich:column>
+  		
+  		<rich:column>
+  		<f:facet name="header">DIPLOME</f:facet>
+  		#{p.diplome}
+  		</rich:column>
+     
+  		</rich:dataTable>
+  		
+  		
+  	</rich:panel>
+  	</div>
+ 	<div style="width:100%;height:30px;border:2px solid #00BFFF;border-radius:0px 0px 12px 12px;background-color:#00BFFF;">
+  			
+  			<rich:panel style="height:25px;border:none;border-radius:0px 0px 6px 8px;margin-top:-3px;background-color:#00BFFF;">
+  				<h:outputText value="copyright© 2014. Tous droits réservés,  Chantal et Vernack " style="font-family:calibri;font-weight:bold;font-size:14px;font-style:italic;margin-left:440px;"/>
+  			</rich:panel>
+  			
+  		</div>
+  </body>
+</html>

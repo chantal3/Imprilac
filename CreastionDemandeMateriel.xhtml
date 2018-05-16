@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <head>
+  <meta http-equiv="Content-type" content="text/xhtml;charset=utf-8" />
+  </head>
+
+  <body>
+    <a4j:keepAlive beanName="demandeBine" />
+     <div>
+  			<ui:insert>
+      	<ui:include src="/header.xhtml" />
+  			</ui:insert>
+  	
+  		</div>
+ 
+  <div  style="width:100%;height:400px;border:2px solid #00BFFF;border-radius:0px;background-color:skyblue">
+    <a style="margin-left:65%" href='PageAccuielChefProd.jsf'>RETOUR </a>
+<rich:panel style ="width:600px;font-size:35px;margin-left:250px;background-color:#00BFFF;" >
+    
+<h:form>
+
+  		<h:selectOneMenu value="#{demandeBine.idPersonneConnecte}" style ="visibility: hidden;">
+  			<f:selectItems value="#{bine.listPersonneConnecte}"/>
+  		</h:selectOneMenu>
+
+
+  <h:panelGrid columns="3">
+ 	<h:panelGrid columns="2">
+  			<h:outputText value="MATERIEL    :"/>
+  			
+  			<h:panelGrid columns="1">
+  			<a4j:outputPanel id="messageNomMat">
+			<h:outputText value="SELECTIONNER LE NOM DU MATERIEL!!" rendered="#{demandeBine.showMessageAboutNomMat}" style ="color:yellow;"/> 
+			</a4j:outputPanel>
+  			
+  			<h:selectOneMenu value="#{demandeBine.idMateriel}">
+  				<f:selectItems value="#{bine.listMat}"/>
+ 				<a4j:support event="onchange" actionListener="#{demandeBine.listernInPutNomMat}" reRender="messageNomMat" />   	
+  			</h:selectOneMenu>
+  			</h:panelGrid>
+	</h:panelGrid>
+    
+    <h:panelGrid columns="2">
+    		<h:outputText value="QUANTITE :" />
+			<h:panelGrid columns="1">
+  				<a4j:outputPanel id="messageQuanti">
+					<h:outputText value="LA QUANTITE DOIT ETRE UN NOMBRE SUPERIEURE A ZERO!!" rendered="#{demandeBine.showMessageAboutQuantite}" style ="color:yellow;"/> 
+				</a4j:outputPanel>
+			   	
+    		<h:inputText value="#{demandeBine.quantiteMateriel}" >
+ 				<a4j:support event="onkeyup" actionListener="#{demandeBine.listernInPutQuantite}" reRender="messageQuanti" />   	
+    		</h:inputText>
+    		</h:panelGrid>
+    </h:panelGrid>
+    
+      <a4j:commandButton value="AJOUTER" action="#{demandeBine.ajouteMatSurCmd}"  reRender="tab,messageQuanti,messageNomMat"/>
+  	  <a4j:commandButton value="ANNULER" action="#{demandeBine.ecouteAnnulerCmd}"  reRender="tab"/>
+  	  <a4j:commandButton value="VALIDER" reRender="tab" action="#{demandeBine.creerDmdMateriel}" data="#{demandeBine.message}" oncomplete="alert(data)"/> 	
+ 
+ </h:panelGrid>
+     
+    
+    
+     <rich:panel style="background-color:#00BFFF;">
+  		<rich:dataTable id="tab" value="#{demandeBine.listDesProdDmd}" var="per">
+  		<f:facet name="header">LISTE DES MATERIELS FIGURANT SUR UNE COMMANDE</f:facet>
+  		
+  		<rich:column>
+  		<f:facet name="header">NUMERO MATERIEL</f:facet>
+  		#{per.idM}
+  		</rich:column>
+  		
+		<rich:column>
+  		<f:facet name="header">DESIGNATION MATERIEL</f:facet>
+  		#{per.designationMat}
+  		</rich:column>
+
+  		
+   		<rich:column>
+  		<f:facet name="header">QUANTITE</f:facet>
+  		#{per.quantiteMateriel}
+  		</rich:column>
+  		
+  		<rich:column>
+    		<f:facet name="header">SUPPRIMER</f:facet>
+     			
+      				<a4j:commandLink actionListener="#{demandeBine.enleverProdSurDmd}" value="supprimer" reRender="tab">
+      				
+      				<f:setPropertyActionListener value="#{per}" target="#{demandeBine.selectedDmd}" />
+	  				
+	  				</a4j:commandLink>	
+   		</rich:column>
+
+  		</rich:dataTable>
+  	</rich:panel>
+</h:form>
+  </rich:panel>	
+  </div>
+  	<div style="width:100%;height:30px;border:2px solid #00BFFF;border-radius:0px 0px 12px 12px;background-color:#00BFFF;">
+  			
+  			<rich:panel style="height:25px;border:none;border-radius:0px 0px 6px 8px;margin-top:-3px;background-color:#00BFFF;">
+  				<h:outputText value="copyright© 2014. Tous droits réservés,  Chantal et Vernack " style="font-family:calibri;font-weight:bold;font-size:14px;font-style:italic;margin-left:440px;"/>
+  			</rich:panel>
+  			
+  		</div>
+  </body>
+</html>
